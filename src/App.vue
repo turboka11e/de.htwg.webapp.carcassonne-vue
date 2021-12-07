@@ -1,40 +1,23 @@
 <template>
   <div id="app" class="bg-brown vh-100">
-    <the-nav></the-nav>
+    <the-nav :connection="connection" :username="username"></the-nav>
 
-    <div class="my-5 container-sm">
-      <div class="row justify-content-center align-items-center">
-        <div class="mb-2 col-md-auto">
-          <the-grid :grid="grid" :active-user="activeUser" :connection="connection"></the-grid>
-        </div>
+    <the-game v-if="lobby.gameStarted" :connection="connection" :grid="grid" :fresh-card="freshCard" :players="players"
+              :game-over="gameOver" :active-user="activeUser"></the-game>
+    <the-lobby v-else :lobby="lobby" :connection="connection" :username="username"></the-lobby>
 
-        <div class=col-md-auto>
-
-          <div class="card shadow-lg" style="width: 18rem;">
-            <div class="card-header">
-              <h3 class="fst-italic fw-bold">Spielerinfos</h3>
-            </div>
-            <the-player-stats :players="players"></the-player-stats>
-            <div class="card-body">
-              <the-controls :fresh-card="freshCard" :active-user="activeUser" :connection="connection"></the-controls>
-            </div>
-          </div>
-        </div>
-        <div class="row justify-content-center align-items-center">
-          <the-chat :chat="chat" :connection="connection"></the-chat>
-        </div>
-      </div>
+    <div class="row justify-content-center align-items-center">
+      <the-chat :chat="chat" :connection="connection" :username="username"></the-chat>
     </div>
   </div>
 </template>
 
 <script>
 
-import TheGrid from "@/components/TheGrid";
-import TheControls from "@/components/TheControls";
-import ThePlayerStats from "@/components/ThePlayerStats";
-import TheChat from "@/components/TheChat";
+import TheChat from "@/components/lobby/TheChat";
 import TheNav from "@/components/TheNav";
+import TheGame from "@/components/TheGame";
+import TheLobby from "@/components/TheLobby";
 
 export default {
   name: 'App',
@@ -49,6 +32,13 @@ export default {
       readyState: 3,
       gameOver: false,
       activeUser: false,
+      lobby: {
+        inhabitants: [],
+        gamefieldsize: 6,
+        gameStarted: false,
+        joined: false
+      },
+
     }
   },
   methods: {
@@ -61,7 +51,7 @@ export default {
         this.readyState = this.connection.readyState
         console.log("Connected to Websocket");
         let msg = {
-          "connect": "success"
+          "loadLobby": "success"
         }
         this.connection.send(JSON.stringify(msg));
       };
@@ -86,7 +76,7 @@ export default {
           for (let [key, value] of Object.entries(json)) {
             console.log(`Received ${key}: ${value}`)
             if (key === 'username') {
-              this.username = value;
+              //this.username = value;
             }
             if (key === 'stats') {
               this.players = value.players;
@@ -106,7 +96,14 @@ export default {
               this.chat = value;
             }
             if (key === 'activeUser') {
-              this.activeUser = value;
+              this.activeUser = this.username === value;
+            }
+            if (key === 'lobby') {
+              this.lobby = value;
+            }
+            if (key === 'joinGame') {
+              this.lobby.gameStarted = true;
+              this.connection.send(JSON.stringify({"loadAll": "load all requested"}))
             }
           }
         }
@@ -114,10 +111,9 @@ export default {
     },
   },
   components: {
+    TheLobby,
+    TheGame,
     TheNav,
-    TheGrid,
-    TheControls,
-    ThePlayerStats,
     TheChat,
   },
   created() {

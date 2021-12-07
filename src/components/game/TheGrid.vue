@@ -53,7 +53,7 @@ export default {
   methods: {
     placeCard(row, col) {
       let request = {
-        "refresh": {
+        "placeCard": {
           "row": row,
           "col": col,
         }

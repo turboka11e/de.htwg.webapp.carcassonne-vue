@@ -19,8 +19,14 @@
                       </li>-->
         </ul>
       </div>
-<!--      <a class="mx-2 btn btn-outline-success ml-auto mr-1" href="/hardNewGame">Neues Spiel</a>-->
+      <!--      <a class="mx-2 btn btn-outline-success ml-auto mr-1" href="/hardNewGame">Neues Spiel</a>-->
       <div class="dropdown">
+        <v-btn
+            @click="newGame"
+            class="mx-3"
+            color="#009688">
+          New Game
+        </v-btn>
         <button :class="websocketStateColor" class="btn dropdown-toggle" type="button" id="dropdownMenuButton1"
                 data-bs-toggle="dropdown" aria-expanded="false">
           {{ websocketState }}
@@ -38,7 +44,18 @@ export default {
   name: 'TheNav',
   props: [
     "username",
+    "connection",
   ],
+  methods: {
+    newGame() {
+      let lobby = this.$parent.lobby;
+      lobby.gameStarted = false;
+      let msg = {
+        "updateLobby": lobby
+      }
+      this.connection.send(JSON.stringify(msg))
+    },
+  },
   computed: {
     websocketState() {
       switch (this.$parent.readyState) {

@@ -11,15 +11,6 @@
 <script>
 export default {
   name: 'ThePlayerStats',
-  // props: {
-  //     players: [
-  //       {
-  //         player: String,
-  //         color: String,
-  //         isOn: Boolean,
-  //       }
-  //     ]
-  // }
   props: [
       "players"
   ]

@@ -50,7 +50,8 @@ export default {
   // },
   props: [
       'chat',
-      'connection'
+      'connection',
+      'username'
   ],
   methods: {
     sendMessage() {
