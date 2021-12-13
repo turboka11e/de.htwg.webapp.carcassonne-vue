@@ -4,10 +4,10 @@
       <button @click="rotateLeft()" class="btn btn-lg btn-outline-dark rounded-circle" :disabled="!activeUser"><i class='fas fa-undo'></i></button>
     </div>
 
-    <div style="height: 85px;" class="col">
+    <div style="height: 100px;" class="col">
 
       <div v-if="freshCard != null" class="cardPlaceholder">
-        <img class="cardImage; rotate"
+        <img class="cardImage rotate"
              :src="'http://' + connection.url.substr(5, 14) + freshCard.src" :key="'http://' + connection.url.substr(5, 14) + freshCard.src" :style="rotationFreshCard"
              style='pointer-events: none; border-radius: 5px;' />
         <transition-group name="fade">
@@ -82,6 +82,43 @@ export default {
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
+}
+
+ .cardPlaceholder {
+   position: relative;
+   top: 0;
+   left: 0;
+ }
+
+.cardImage {
+  position: relative;
+  top: 0;
+  left: 0;
+  border-radius: 5px;
+}
+
+.north {
+  position: absolute;
+  top: 1px;
+  left: 27px;
+}
+
+.east {
+  position: absolute;
+  top: 25px;
+  left: 54px;
+}
+
+.south {
+  position: absolute;
+  top: 54px;
+  left: 27px;
+}
+
+.west {
+  position: absolute;
+  top: 25px;
+  left: 1px;
 }
 
 </style>

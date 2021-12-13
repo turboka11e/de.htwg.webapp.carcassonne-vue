@@ -14,9 +14,6 @@
           <li class="nav-item">
             <a class="mx-2 nav-link disabled" aria-disabled="true">{{ username }}</a>
           </li>
-          <!--            <li class="nav-item">
-                        <a class="mx-2 nav-link" href="/rules">Regeln</a>
-                      </li>-->
         </ul>
       </div>
       <!--      <a class="mx-2 btn btn-outline-success ml-auto mr-1" href="/hardNewGame">Neues Spiel</a>-->
@@ -73,7 +70,7 @@ export default {
     websocketStateColor() {
       switch (this.$parent.readyState) {
         case 0:
-          return "bg-success"
+          return "bg-warning"
         case 1:
           return "bg-success"
         case 2:

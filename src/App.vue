@@ -2,13 +2,15 @@
   <div id="app" class="bg-brown vh-100">
     <the-nav :connection="connection" :username="username"></the-nav>
 
-    <the-game v-if="lobby.gameStarted" :connection="connection" :grid="grid" :fresh-card="freshCard" :players="players"
-              :game-over="gameOver" :active-user="activeUser"></the-game>
-    <the-lobby v-else :lobby="lobby" :connection="connection" :username="username"></the-lobby>
+    <v-container v-if="readyState === 1">
+      <the-game v-if="lobby.gameStarted" :connection="connection" :grid="grid" :fresh-card="freshCard" :players="players"
+                :game-over="gameOver" :active-user="activeUser"></the-game>
+      <the-lobby v-else :lobby="lobby" :connection="connection" :username="username"></the-lobby>
 
-    <div class="row justify-content-center align-items-center">
       <the-chat :chat="chat" :connection="connection" :username="username"></the-chat>
-    </div>
+    </v-container>
+
+    <the-rules></the-rules>
   </div>
 </template>
 
@@ -18,6 +20,7 @@ import TheChat from "@/components/lobby/TheChat";
 import TheNav from "@/components/TheNav";
 import TheGame from "@/components/TheGame";
 import TheLobby from "@/components/TheLobby";
+import TheRules from "@/components/TheRules";
 
 export default {
   name: 'App',
@@ -38,7 +41,6 @@ export default {
         gameStarted: false,
         joined: false
       },
-
     }
   },
   methods: {
@@ -100,6 +102,10 @@ export default {
             }
             if (key === 'lobby') {
               this.lobby = value;
+              if(!this.lobby.inhabitants.includes(this.username)) {
+                   console.log(this.username);
+                   this.username = '';
+              }
             }
             if (key === 'joinGame') {
               this.lobby.gameStarted = true;
@@ -115,6 +121,7 @@ export default {
     TheGame,
     TheNav,
     TheChat,
+    TheRules,
   },
   created() {
     this.newWebsocket()
@@ -123,14 +130,6 @@ export default {
 </script>
 
 <style>
-/*#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}*/
 
 body {
   margin: 0;
@@ -159,43 +158,6 @@ body {
 .topnav a.active {
   background-color: #04AA6D;
   color: white;
-}
-
-.cardPlaceholder {
-  position: relative;
-  top: 0;
-  left: 0;
-}
-
-.cardImage {
-  position: relative;
-  top: 0;
-  left: 0;
-  border-radius: 5px;
-}
-
-.north {
-  position: absolute;
-  top: 1px;
-  left: 27px;
-}
-
-.east {
-  position: absolute;
-  top: 25px;
-  left: 54px;
-}
-
-.south {
-  position: absolute;
-  top: 54px;
-  left: 27px;
-}
-
-.west {
-  position: absolute;
-  top: 25px;
-  left: 1px;
 }
 
 .bg-brown {

@@ -63,3 +63,42 @@ export default {
   }
 }
 </script>
+
+<style>
+.cardPlaceholder {
+  position: relative;
+  top: 0;
+  left: 0;
+}
+
+.cardImage {
+  position: relative;
+  top: 0;
+  left: 0;
+  border-radius: 5px;
+}
+
+.north {
+  position: absolute;
+  top: 1px;
+  left: 27px;
+}
+
+.east {
+  position: absolute;
+  top: 25px;
+  left: 54px;
+}
+
+.south {
+  position: absolute;
+  top: 54px;
+  left: 27px;
+}
+
+.west {
+  position: absolute;
+  top: 25px;
+  left: 1px;
+}
+</style>
