@@ -9,7 +9,7 @@
 </template>
 
  <script>
-  import { createUserWithEmailAndPassword } from 'firebase/auth';
+  import { createUserWithEmailAndPassword, getAuth } from 'firebase/auth';
 
   export default {
     name: 'signUp',
@@ -21,7 +21,8 @@
     },
     methods: {
       signUp: function() {
-        createUserWithEmailAndPassword(this.email, this.password).then(
+        const auth = getAuth();
+        createUserWithEmailAndPassword(auth, this.email, this.password).then(
           () => {
             this.$router.replace('home')
           },
