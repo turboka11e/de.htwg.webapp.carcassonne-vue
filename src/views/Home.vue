@@ -90,7 +90,7 @@ export default {
     return {
       username: "",
       connection: new WebSocket(
-        "ws://" + process.env.VUE_APP_SERVER_URL + ":9000/websocket"
+        "ws://" + process.env.VUE_APP_SERVER_URL + "/websocket"
       ),
       grid: [],
       freshCard: null,
