@@ -89,9 +89,7 @@ export default {
   data() {
     return {
       username: "",
-      connection: new WebSocket(
-        "ws://" + process.env.VUE_APP_SERVER_URL + "/websocket"
-      ),
+      connection: null,
       grid: [],
       freshCard: null,
       players: [],
@@ -116,7 +114,12 @@ export default {
       });
     },
     newWebsocket() {
-      console.log(`Connecting to WebSocket... ${process.env.VUE_APP_SERVER_URL}`);
+      this.connection = new WebSocket(
+        "ws://" + process.env.VUE_APP_SERVER_URL + "/websocket"
+      );
+      console.log(
+        `Connecting to WebSocket... ${process.env.VUE_APP_SERVER_URL}`
+      );
       if (this.connection.readyState === WebSocket.CLOSED) {
         this.connection = new WebSocket(
           "ws://" + process.env.VUE_APP_SERVER_URL + "/websocket"
