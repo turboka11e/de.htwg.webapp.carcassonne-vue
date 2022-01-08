@@ -7,12 +7,12 @@
           <td :key="'col' + index">
             <div :key="col.col + col.row" style="height: 80px; width: 80px;">
               <input v-if="col.empty" type="image" v-on:click="placeCard(col.row, col.col)" :disabled="!activeUser"
-                     :src="'http://' + connection.url.substr(5, 14) + col.src">
+                     :src="'https://' + server_url + col.src">
               <div v-else class="cardPlaceholder">
-                <img style="pointer-events: none;" class="cardImage" :src="'http://' + connection.url.substr(5, 14) + col.src"
+                <img style="pointer-events: none;" class="cardImage" :src="'https://' + server_url + col.src"
                      :style="{ transform: 'rotate(' + col.rotation + 'deg)'}">
                 <template v-for="manican in col.manicans">
-                  <img style="pointer-events: none" :key="'grid' + manican.dir" :class="manican.dir" :src="'http://' + connection.url.substr(5, 14) + manican.src">
+                  <img style="pointer-events: none" :key="'grid' + manican.dir" :class="manican.dir" :src="'https://' + server_url + manican.src">
                 </template>
               </div>
             </div>
@@ -27,6 +27,11 @@
 <script>
 export default {
   name: 'TheGrid',
+  data() {
+    return {
+      server_url: process.env.VUE_APP_SERVER_URL
+    }
+  },
   props: {
     grid: {
       rows: [{

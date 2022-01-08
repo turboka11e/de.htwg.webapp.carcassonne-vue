@@ -8,12 +8,12 @@
 
       <div v-if="freshCard != null" class="cardPlaceholder">
         <img class="cardImage rotate"
-             :src="'http://' + connection.url.substr(5, 14) + freshCard.src" :key="'http://' + connection.url.substr(5, 14) + freshCard.src" :style="rotationFreshCard"
+             :src="'http://' +  server_url + freshCard.src" :key="'https://' + server_url + freshCard.src" :style="rotationFreshCard"
              style='pointer-events: none; border-radius: 5px;' />
         <transition-group name="fade">
           <div :key="'freshCard'" v-if="freshCard.manicansShow">
             <div :key="'freshCard' + manican.dir" v-for="manican in freshCard.manicans">
-              <input type="image" :disabled="manican.disabled || !activeUser" @click="selectManican(manican.dir)" :class="manican.dir" :src="'http://' + connection.url.substr(5, 14) + manican.path">
+              <input type="image" :disabled="manican.disabled || !activeUser" @click="selectManican(manican.dir)" :class="manican.dir" :src="'https://' + server_url + manican.path">
             </div>
           </div>
         </transition-group>
@@ -31,6 +31,11 @@
 <script>
 export default {
   name: 'TheControls',
+  data() {
+    return {
+      server_url: process.env.VUE_APP_SERVER_URL
+    }
+  },
   props: {
     freshCard: {
       src: String,
