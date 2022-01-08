@@ -2,6 +2,10 @@
   "name": "de.htwg.webapp.carcassonne-vue",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": "16.x",
+    "npm": "8.2.0"
+  },
   "scripts": {
     "start": "node server.js",
     "serve": "vue-cli-service serve",
