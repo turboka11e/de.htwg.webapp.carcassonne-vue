@@ -116,7 +116,7 @@ export default {
       });
     },
     newWebsocket() {
-      console.log("Connecting to WebSocket... ");
+      console.log(`Connecting to WebSocket... ${process.env.VUE_APP_SERVER_URL}`);
       if (this.connection.readyState === WebSocket.CLOSED) {
         this.connection = new WebSocket(
           "ws://" + process.env.VUE_APP_SERVER_URL + "/websocket"
