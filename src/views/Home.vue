@@ -147,6 +147,7 @@ export default {
               this.activeUser = this.username === value;
             }
             if (key === "lobby") {
+              this.gameOver = false;
               this.lobby = value;
               if (!this.lobby.inhabitants.includes(this.username)) {
                 this.username = "";
