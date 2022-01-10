@@ -1,78 +1,47 @@
 <template>
-  <div class="home">
-    <v-app-bar app>
-      <v-toolbar-title>Carcassonne</v-toolbar-title>
-    </v-app-bar>
+  <v-container>
+    <div class="home">
+      <the-nav-drawer></the-nav-drawer>
+      <the-nav :connection="connection" :username="username"></the-nav>
 
-    <v-navigation-drawer app permanent expand-on-hover>
-      <v-list>
-        <v-list-item class="px-2">
-          <v-list-item-avatar>
-            <v-img :src="user.photoURL" :alt="user.photoURL"></v-img>
-          </v-list-item-avatar>
-        </v-list-item>
+      <v-container v-if="readyState === 1 && !showRules">
+        <the-game
+          v-if="lobby.gameStarted"
+          :connection="connection"
+          :grid="grid"
+          :fresh-card="freshCard"
+          :players="players"
+          :game-over="gameOver"
+          :active-user="activeUser"
+        ></the-game>
+        <the-lobby
+          v-else
+          :lobby="lobby"
+          :connection="connection"
+          :username="username"
+        ></the-lobby>
 
-        <v-list-item link>
-          <v-list-item-content>
-            <v-list-item-title class="text-h6">
-              {{ user.displayName }}
-            </v-list-item-title>
-            <v-list-item-subtitle>{{ user.email }}</v-list-item-subtitle>
-          </v-list-item-content>
-        </v-list-item>
-      </v-list>
-
-      <v-divider></v-divider>
-
-      <v-list nav dense>
-        <v-list-item link>
-          <v-list-item-icon>
-            <v-icon>mdi-border-outside</v-icon>
-          </v-list-item-icon>
-          <v-list-item-title>Gameboard</v-list-item-title>
-        </v-list-item>
-        <v-list-item link>
-          <v-list-item-icon>
-            <v-icon>mdi-note</v-icon>
-          </v-list-item-icon>
-          <v-list-item-title>Rules</v-list-item-title>
-        </v-list-item>
-        <v-list-item link @click="logout">
-          <v-list-item-icon>
-            <v-icon>mdi-logout</v-icon>
-          </v-list-item-icon>
-          <v-list-item-title>Logout</v-list-item-title>
-        </v-list-item>
-      </v-list>
-    </v-navigation-drawer>
-
-    <the-nav :connection="connection" :username="username"></the-nav>
-    <v-container v-if="readyState === 1">
-      <the-game
-        v-if="lobby.gameStarted"
-        :connection="connection"
-        :grid="grid"
-        :fresh-card="freshCard"
-        :players="players"
-        :game-over="gameOver"
-        :active-user="activeUser"
-      ></the-game>
-      <the-lobby
-        v-else
-        :lobby="lobby"
-        :connection="connection"
-        :username="username"
-      ></the-lobby>
-
-      <the-chat
-        :chat="chat"
-        :connection="connection"
-        :username="username"
-      ></the-chat>
-    </v-container>
-
-    <the-rules></the-rules>
-  </div>
+        <the-chat
+          :chat="chat"
+          :connection="connection"
+          :username="username"
+        ></the-chat>
+      </v-container>
+      <the-rules v-else-if="showRules"></the-rules>
+      <v-container v-else>
+        <v-row justify="center" align="center">
+          <v-col class="d-flex justify-center">
+            <v-progress-circular
+              :size="70"
+              :width="7"
+              color="white"
+              indeterminate
+            ></v-progress-circular>
+          </v-col>
+        </v-row>
+      </v-container>
+    </div>
+  </v-container>
 </template>
 
 <script>
@@ -83,11 +52,15 @@ import TheNav from "@/components/TheNav";
 import TheGame from "@/components/TheGame";
 import TheLobby from "@/components/TheLobby";
 import TheRules from "@/components/TheRules";
+import TheNavDrawer from "@/components/TheNavDrawer";
 
 export default {
   name: "home",
   data() {
     return {
+      showRules: false,
+      drawer: true,
+      mini: true,
       username: "",
       connection: new WebSocket(
         "wss://" + process.env.VUE_APP_SERVER_URL + "/websocket"
@@ -116,9 +89,6 @@ export default {
       });
     },
     newWebsocket() {
-      console.log(
-        `Connecting to WebSocket... ${process.env.VUE_APP_SERVER_URL}`
-      );
       if (this.connection.readyState === WebSocket.CLOSED) {
         this.connection = new WebSocket(
           "wss://" + process.env.VUE_APP_SERVER_URL + "/websocket"
@@ -198,7 +168,6 @@ export default {
     const auth = getAuth();
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        user.photoURL;
         this.user = user;
       } else {
         this.$router.replace("login");
@@ -211,6 +180,7 @@ export default {
     TheNav,
     TheChat,
     TheRules,
+    TheNavDrawer,
   },
 };
 </script>

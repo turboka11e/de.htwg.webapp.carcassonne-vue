@@ -1,85 +1,95 @@
 <template>
-  <nav class="navbar navbar-expand-sm navbar-light bg-light bg-gradient border-bottom justify-content-end shadow-lg">
-    <div class="container-sm">
-      <a class="mx-2 navbar-brand flex-grow-1" href="#">
-        <img src="../../public/images/Logo-Carcassonne_IMGP.png" alt="" width="40" height="40">
-        <img src="../../public/images/CarcassonneText_IMGP.png" alt="" width="168" height="30">
-      </a>
+  <v-app-bar dark app>
+    <v-toolbar-title>
+      <img
+        src="../../public/images/Logo-Carcassonne_IMGP.png"
+        alt=""
+        width="40"
+        height="40"
+      />
+      <img
+        class="invert mx-2"
+        src="../../public/images/CarcassonneText_IMGP.png"
+        alt=""
+        width="168"
+        height="30"
+      />
+    </v-toolbar-title>
+    <v-spacer></v-spacer>
+    <v-btn disabled text plain>{{ username }}</v-btn>
 
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse flex-grow-0" id="navbarSupportedContent">
-        <ul class="navbar-nav text-right">
-          <li class="nav-item">
-            <a class="mx-2 nav-link disabled" aria-disabled="true">{{ username }}</a>
-          </li>
-        </ul>
-      </div>
-      <!--      <a class="mx-2 btn btn-outline-success ml-auto mr-1" href="/hardNewGame">Neues Spiel</a>-->
-      <div class="dropdown">
-        <v-btn
-            @click="newGame"
-            class="mx-3"
-            color="#009688">
-          New Game
+    <v-menu bottom left offset-y>
+      <template v-slot:activator="{ on, attrs }">
+        <v-btn white icon v-bind="attrs" v-on="on">
+          <v-icon :color="websocketStateColor">mdi-circle</v-icon>
         </v-btn>
-        <button :class="websocketStateColor" class="btn dropdown-toggle" type="button" id="dropdownMenuButton1"
-                data-bs-toggle="dropdown" aria-expanded="false">
-          {{ websocketState }}
-        </button>
-        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-          <li><a v-on:click="$parent.newWebsocket" class="dropdown-item" href="#">Refresh</a></li>
-        </ul>
-      </div>
-    </div>
-  </nav>
+      </template>
+
+      <v-list>
+        <v-list-item @click="$parent.newWebsocket">
+          <v-list-item-title>Reconnect</v-list-item-title>
+        </v-list-item>
+      </v-list>
+    </v-menu>
+    <v-btn :disabled="websocketState" @click="newGame" class="mx-3" color="#009688"> New Game </v-btn>
+  </v-app-bar>
 </template>
 
 <script>
 export default {
-  name: 'TheNav',
-  props: [
-    "username",
-    "connection",
-  ],
+  name: "TheNav",
+  data() {
+    return {};
+  },
+  props: ["username", "connection"],
   methods: {
     newGame() {
       let lobby = this.$parent.lobby;
       lobby.gameStarted = false;
       let msg = {
-        "updateLobby": lobby
-      }
-      this.connection.send(JSON.stringify(msg))
+        updateLobby: lobby,
+      };
+      this.connection.send(JSON.stringify(msg));
     },
   },
   computed: {
     websocketState() {
       switch (this.$parent.readyState) {
         case 0:
-          return "CONNECTING"
+          // return "CONNECTING";
+          return true;
         case 1:
-          return "OPEN"
+          // return "OPEN";
+          return false;
         case 2:
-          return "CLOSING"
+          // return "CLOSING";
+          return true;
         case 3:
-          return "CLOSED"
+          // return "CLOSED";
+          return true;
       }
-      return ""
+      return "";
     },
     websocketStateColor() {
       switch (this.$parent.readyState) {
         case 0:
-          return "bg-warning"
+          return "yellow";
         case 1:
-          return "bg-success"
+          return "green";
         case 2:
-          return "bg-danger"
+          return "red";
         case 3:
-          return "bg-danger"
+          return "red";
       }
-      return ""
+      return "";
     },
   },
-}
+};
 </script>
+
+<style scoped>
+.invert {
+  -webkit-filter: invert(1);
+  filter: invert(1)
+}
+</style>

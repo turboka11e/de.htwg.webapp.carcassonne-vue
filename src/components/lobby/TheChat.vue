@@ -1,5 +1,5 @@
 <template>
-  <v-footer
+  <v-container
       fixed
       color="#033"
   >
@@ -36,7 +36,7 @@
         </v-card>
       </div>
     </div>
-  </v-footer>
+  </v-container>
 </template>
 
 <script>

@@ -61,7 +61,6 @@ export default {
       this.connection.send(JSON.stringify({"rotate": "Right"}));
     },
     rotateLeft() {
-      console.log("legtz")
       this.freshCard.manicansShow = false;
       this.connection.send(JSON.stringify({"rotate": "Left"}))
     }
