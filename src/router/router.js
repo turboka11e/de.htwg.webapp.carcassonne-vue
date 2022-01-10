@@ -22,18 +22,25 @@ const router = new Router({
       path: '/login',
       name: 'Login',
       component: Login,
+      meta: {
+        title: 'Login'
+      }
     },
     {
       path: '/sign-up',
       name: 'SignUp',
-      component: SignUp
+      component: SignUp,
+      meta: {
+        title: 'Sign Up'
+      }
     },
     {
       path: '/home',
       name: 'Home',
       component: Home,
       meta: {
-        requiresAuth: true
+        requiresAuth: true,
+        title: 'Gameboard',
       }
     },
   ]
@@ -46,6 +53,13 @@ router.beforeEach((to, from, next) => {
   if (requiresAuth && !currentUser) next('login');
   else if (!requiresAuth && currentUser) next('home');
   else next();
+});
+
+const DEFAULT_TITLE = 'Carcassonne';
+router.afterEach((to) => {
+  Vue.nextTick(() => {
+    document.title = to.meta.title || DEFAULT_TITLE;
+  });
 });
 
 export default router;

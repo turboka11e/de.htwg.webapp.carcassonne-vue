@@ -47,7 +47,7 @@
 <script>
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 
-import TheChat from "@/components/lobby/TheChat";
+import TheChat from "@/components/TheChat";
 import TheNav from "@/components/TheNav";
 import TheGame from "@/components/TheGame";
 import TheLobby from "@/components/TheLobby";

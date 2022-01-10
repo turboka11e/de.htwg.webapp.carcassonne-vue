@@ -40,6 +40,7 @@
       <v-col cols="auto">
         <v-btn
             @click="startGame"
+            :disabled="this.lobby.inhabitants.length < 1"
             class="mx-2"
             fab
             dark

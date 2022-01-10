@@ -44,6 +44,7 @@ export default {
   props: ["username", "connection"],
   methods: {
     newGame() {
+      this.$parent.showRules = false;
       let lobby = this.$parent.lobby;
       lobby.gameStarted = false;
       let msg = {
