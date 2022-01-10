@@ -72,6 +72,7 @@ export default {
       readyState: 3,
       gameOver: false,
       activeUser: false,
+      usernameIsNotSet: true,
       lobby: {
         inhabitants: [],
         gamefieldsize: 6,
@@ -149,6 +150,7 @@ export default {
               this.lobby = value;
               if (!this.lobby.inhabitants.includes(this.username)) {
                 this.username = "";
+                this.usernameIsNotSet = true;
               }
             }
             if (key === "joinGame") {

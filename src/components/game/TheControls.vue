@@ -1,40 +1,66 @@
 <template>
-  <div class="row align-items-center">
-    <div class="col">
-      <button @click="rotateLeft()" class="btn btn-lg btn-outline-dark rounded-circle" :disabled="!activeUser"><i class='fas fa-undo'></i></button>
-    </div>
+  <v-row align-content="center" align="center" justify="center">
+    <v-btn
+      outlined
+      icon
+      color="black"
+      @click="rotateLeft()"
+      :disabled="!activeUser"
+      x-large
+      elevation="2"
+    >
+      <v-icon>mdi-rotate-left</v-icon>
+    </v-btn>
 
-    <div style="height: 100px;" class="col">
-
+    <div style="height: 100px; max-width: 100px" class="col">
       <div v-if="freshCard != null" class="cardPlaceholder">
-        <img class="cardImage rotate"
-             :src="'http://' +  server_url + freshCard.src" :key="'https://' + server_url + freshCard.src" :style="rotationFreshCard"
-             style='pointer-events: none; border-radius: 5px;' />
+        <img
+          class="cardImage rotate"
+          :src="'http://' + server_url + freshCard.src"
+          :key="'https://' + server_url + freshCard.src"
+          :style="rotationFreshCard"
+          style="pointer-events: none; border-radius: 5px"
+        />
         <transition-group name="fade">
           <div :key="'freshCard'" v-if="freshCard.manicansShow">
-            <div :key="'freshCard' + manican.dir" v-for="manican in freshCard.manicans">
-              <input type="image" :disabled="manican.disabled || !activeUser" @click="selectManican(manican.dir)" :class="manican.dir" :src="'https://' + server_url + manican.path">
+            <div
+              :key="'freshCard' + manican.dir"
+              v-for="manican in freshCard.manicans"
+            >
+              <input
+                type="image"
+                :disabled="manican.disabled || !activeUser"
+                @click="selectManican(manican.dir)"
+                :class="manican.dir"
+                :src="'https://' + server_url + manican.path"
+              />
             </div>
           </div>
         </transition-group>
       </div>
-
     </div>
 
-    <div class="col">
-      <button @click="rotateRight" class="btn btn-lg btn-outline-dark rounded-circle" :disabled="!activeUser"><i
-          class='fas fa-redo'></i></button>
-    </div>
-  </div>
+    <v-btn
+      outlined
+      icon
+      color="black"
+      @click="rotateRight"
+      :disabled="!activeUser"
+      x-large
+      elevation="2"
+    >
+      <v-icon>mdi-rotate-right</v-icon>
+    </v-btn>
+  </v-row>
 </template>
 
 <script>
 export default {
-  name: 'TheControls',
+  name: "TheControls",
   data() {
     return {
-      server_url: process.env.VUE_APP_SERVER_URL
-    }
+      server_url: process.env.VUE_APP_SERVER_URL,
+    };
   },
   props: {
     freshCard: {
@@ -45,39 +71,38 @@ export default {
           dir: String,
           path: String,
           disabled: Boolean,
-        }
+        },
       ],
-      manicansShow: Boolean
+      manicansShow: Boolean,
     },
     activeUser: Boolean,
     connection: WebSocket,
   },
   methods: {
     selectManican(dir) {
-      this.connection.send(JSON.stringify({"manican": dir}))
+      this.connection.send(JSON.stringify({ manican: dir }));
     },
     rotateRight() {
       this.freshCard.manicansShow = false;
-      this.connection.send(JSON.stringify({"rotate": "Right"}));
+      this.connection.send(JSON.stringify({ rotate: "Right" }));
     },
     rotateLeft() {
       this.freshCard.manicansShow = false;
-      this.connection.send(JSON.stringify({"rotate": "Left"}))
-    }
+      this.connection.send(JSON.stringify({ rotate: "Left" }));
+    },
   },
   computed: {
     rotationFreshCard() {
       return {
-        transform: 'rotate(' + this.freshCard.rotation + 'deg)',
-        transition: 'all 0.2s'
-      }
+        transform: "rotate(" + this.freshCard.rotation + "deg)",
+        transition: "all 0.2s",
+      };
     },
-  }
-}
+  },
+};
 </script>
 
 <style scoped>
-
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.5s ease;
@@ -88,11 +113,11 @@ export default {
   opacity: 0;
 }
 
- .cardPlaceholder {
-   position: relative;
-   top: 0;
-   left: 0;
- }
+.cardPlaceholder {
+  position: relative;
+  top: 0;
+  left: 0;
+}
 
 .cardImage {
   position: relative;
@@ -124,5 +149,4 @@ export default {
   top: 25px;
   left: 1px;
 }
-
 </style>

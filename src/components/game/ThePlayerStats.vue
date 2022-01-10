@@ -1,18 +1,19 @@
 <template>
-  <ul class="list-group list-group-flush">
-    <div :key="player.color" v-for="player in players">
-      <li :style="{color: player.color}" class="list-group-item fw-bold">
-        {{player.player}} <span v-if="player.isOn" class="badge bg-success">Am Zug</span>
-      </li>
-    </div>
-  </ul>
+  <v-list>
+    <v-list-item v-for="player in players" :key="player.color">
+      <v-list-item-content :style="{ color: player.color }">
+        <v-list-item-title>
+          {{ player.player }}
+          <span v-if="player.isOn" class="badge bg-success">Am Zug</span>
+        </v-list-item-title>
+      </v-list-item-content>
+    </v-list-item>
+  </v-list>
 </template>
 
 <script>
 export default {
-  name: 'ThePlayerStats',
-  props: [
-      "players"
-  ]
-}
+  name: "ThePlayerStats",
+  props: ["players"],
+};
 </script>
