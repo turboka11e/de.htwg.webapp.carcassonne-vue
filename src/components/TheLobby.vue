@@ -129,7 +129,6 @@ export default {
       }
     },
     getPicture(index) {
-      console.log(index)
       switch (index) {
         case 0:
           return require("../../public/images/characters/0.jpg");
@@ -150,7 +149,6 @@ export default {
       if (name === this.$parent.username) {
         this.$parent.username = '';
       }
-      console.log(msg)
       this.connection.send(JSON.stringify(msg));
     },
     joinLobby() {
@@ -162,7 +160,6 @@ export default {
       let msg = {
         "updateLobby": this.lobby
       }
-      console.log(msg)
       this.connection.send(JSON.stringify(msg));
     },
     startGame() {

@@ -90,13 +90,14 @@ export default {
     },
     newWebsocket() {
       if (this.connection.readyState === WebSocket.CLOSED) {
+        console.log("Websocket reconnecting...");
         this.connection = new WebSocket(
           "wss://" + process.env.VUE_APP_SERVER_URL + "/websocket"
         );
       }
       this.connection.onopen = () => {
         this.readyState = this.connection.readyState;
-        console.log("Connected to Websocket");
+        // console.log("Connected to Websocket");
         let msg = {
           loadLobby: "success",
         };
@@ -104,24 +105,25 @@ export default {
       };
       this.connection.onclose = () => {
         this.readyState = this.connection.readyState;
-        console.log("Connection with Websocket Closed!");
+        // console.log("Connection with Websocket Closed!");
+        setTimeout(() => {
+          this.newWebsocket()
+        }, 1000);
       };
 
       this.connection.onerror = (error) => {
         this.readyState = this.connection.readyState;
-        console.log("Error in Websocket Occured: " + error);
+        console.error("Error in Websocket Occured: " + error);
         this.newWebsocket();
       };
 
       this.connection.onmessage = (e) => {
         this.readyState = this.connection.readyState;
-        console.log("received message " + e);
-
         if (typeof e.data === "string") {
           let json = JSON.parse(e.data);
 
           for (let [key, value] of Object.entries(json)) {
-            console.log(`Received ${key}: ${value}`);
+            // console.log(`Received ${key}: ${value}`);
             if (key === "username") {
               //this.username = value;
             }
@@ -132,14 +134,12 @@ export default {
               this.freshCard = value;
             }
             if (key === "grid") {
-              console.log(value);
               this.grid = value;
             }
             if (key === "gameOver") {
               this.gameOver = true;
             }
             if (key === "chat") {
-              console.log(value);
               this.chat = value;
             }
             if (key === "activeUser") {
@@ -148,7 +148,6 @@ export default {
             if (key === "lobby") {
               this.lobby = value;
               if (!this.lobby.inhabitants.includes(this.username)) {
-                console.log(this.username);
                 this.username = "";
               }
             }
